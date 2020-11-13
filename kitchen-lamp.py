@@ -4,7 +4,7 @@ from webthing import (Property, Thing, Value)
 def make_kitchen_lamp(pin):
     thing = Thing(
         'urn:dev:ops:my-lamp-1234',
-        'My Lamp',
+        'kitchen lamp',
         ['OnOffSwitch'],
         'kitchen lamp'
     )
