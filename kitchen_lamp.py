@@ -1,6 +1,12 @@
 from gpiozero import LED
 from webthing import (Property, Thing, Value)
 
+def switch_led(led, value):
+    if value:
+        led.on()
+    else:
+        led.off()
+
 def make_kitchen_lamp(pin):
     thing = Thing(
         'urn:dev:ops:my-lamp-1234',

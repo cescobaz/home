@@ -11,13 +11,13 @@ import dht11_thing
 
 
 def run_server():
-    kitchen_lamp = make_kitchen_lamp(17)
-    humidity_thing, temperature_thing, update_values = make_dht11_thing(18)
+    lamp = kitchen_lamp.make_kitchen_lamp(24)
+    humidity_thing, temperature_thing, update_values = dht11_thing.make_dht11_thing(18)
     timer = tornado.ioloop.PeriodicCallback(update_values, 3000)
     timer.start()
 
     server = WebThingServer(
-        MultipleThings([kitchen_lamp, humidity_thing, temperature_thing],
+        MultipleThings([lamp, humidity_thing, temperature_thing],
                        'LightAndTempDevice'),
         port=8888)
     try:
