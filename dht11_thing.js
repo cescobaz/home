@@ -7,6 +7,23 @@ const {
 } = require('webthing')
 const dht = require('node-dht-sensor')
 
+function read(pin, humidityValue, temperatureValue) {
+  return () => {
+    dht.read(11, pin, function (error, temperature, humidity) {
+    if (error) {
+      console.log('error', error)
+      setTimeout(read(pin, humidityValue, temperatureValue), 2000)
+      return
+    }
+    console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
+    humidityValue.notifyOfExternalUpdate(humidity)
+    temperatureValue.notifyOfExternalUpdate(temperature)
+    setTimeout(read(pin, humidityValue, temperatureValue), 2000)
+  })
+  }
+}
+
+// pin: physical pin
 function makeDHTThing (pin) {
   const humidityThing = new Thing(
     'urn:dev:ops:kitchen-humidity-sensor-1234',
@@ -22,8 +39,8 @@ function makeDHTThing (pin) {
   )
   const humidityValue = new Value(0.0)
   const temperatureValue = new Value(0.0)
-  humidityThing.add_property(
-    Property(humidityThing,
+  humidityThing.addProperty(
+    new Property(humidityThing,
       'level',
       humidityValue,
       {
@@ -36,8 +53,8 @@ function makeDHTThing (pin) {
         unit: 'percent',
         readOnly: true
       }))
-  temperatureThing.add_property(
-    Property(temperatureThing,
+  temperatureThing.addProperty(
+    new Property(temperatureThing,
       'level',
       temperatureValue,
       {
@@ -46,18 +63,12 @@ function makeDHTThing (pin) {
         type: 'number',
         description: 'The current temperature in °C',
         minimum: -5,
-        maximum: 50,
+        maximum: 40,
         unit: 'celsius',
         readOnly: true
       }))
-  dht.read(11, pin, function (err, temperature, humidity) {
-    if (!err) {
-      console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
-      humidityValue.notifyOfExternalUpdate(humidity)
-      temperatureValue.notifyOfExternalUpdate(temperature)
-    }
-  })
-  return { humidityThing, temperatureValue }
+  read(pin, humidityValue, temperatureValue)()
+  return { humidityThing, temperatureThing }
 }
 
 module.exports = { makeDHTThing }
