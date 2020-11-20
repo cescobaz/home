@@ -9,14 +9,14 @@ def update_values(sensor, pin, humidity_value, temperature_value):
 
 def make_dht11_thing(pin):
         humidity_thing = Thing(
-            'urn:dev:ops:my-humidity-sensor-1234',
-            'My Humidity Sensor',
+            'urn:dev:ops:kitchen-humidity-sensor-1234',
+            'kitchen humidity',
             ['MultiLevelSensor'],
             'A web connected humidity sensor'
         )
         temperature_thing = Thing(
-            'urn:dev:ops:my-temperature-sensor-1234',
-            'My Temperature Sensor',
+            'urn:dev:ops:kitchen-temperature-sensor-1234',
+            'kitchen temperature',
             ['MultiLevelSensor'],
             'A web connected temperature sensor'
         )
