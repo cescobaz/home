@@ -5,7 +5,7 @@ const {
 } = require('webthing')
 const Gpio = require('onoff').Gpio
 
-function makeBlackButtonThing (pin) {
+function makeBlackButtonThing (pin, asToggle) {
   const thing = new Thing(
     'urn:dev:ops:black-button-0',
     'kitchen black button',
@@ -21,9 +21,23 @@ function makeBlackButtonThing (pin) {
       readOnly: true
     }))
   const button = new Gpio(pin, 'in', 'both')
+	let toggle = false
+	let previousValue = false
+	let newValue = false
   button.watch((err, v) => {
-	  value.notifyOfExternalUpdate(v === 1)
-          console.log(v === 1)})
+	  console.log(asToggle, toggle, v)
+	  if (asToggle && v === 0) {
+		  toggle = !toggle
+		  newValue = toggle
+	  } else if (!asToggle) {
+		  newValue = v === 1
+	  }
+	  if (newValue !== previousValue) {
+                  console.log('button to value ' + newValue)
+		  value.notifyOfExternalUpdate(newValue)
+	          previousValue = newValue
+	  }
+          })
   return thing
 }
 

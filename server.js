@@ -7,7 +7,7 @@ const { makeDHTThing } = require('./dht11_thing')
 const { makeLampThing } = require('./kitchen_lamp')
 
 function runServer () {
-  const blackButtonThing = makeBlackButtonThing(7)
+  const blackButtonThing = makeBlackButtonThing(7, true)
   const kitchenLamp = makeLampThing(24)
   const { humidityThing, temperatureThing, stop } = makeDHTThing(18)
   const server = new WebThingServer(new MultipleThings([blackButtonThing, kitchenLamp, humidityThing, temperatureThing],
