@@ -3,7 +3,7 @@ const {
   Thing,
   Value
 } = require('webthing')
-const rpio = require('rpio')
+const Gpio = require('onoff').Gpio
 
 function makeBlackButtonThing (pin) {
   const thing = new Thing(
@@ -20,8 +20,10 @@ function makeBlackButtonThing (pin) {
       description: 'Whether the button is pressed',
       readOnly: true
     }))
-  rpio.open(pin, rpio.INPUT)
-  rpio.poll(pin, () => value.notifyOfExternalUpdate(rpio.read(pin) === 1))
+  const button = new Gpio(pin, 'in', 'both')
+  button.watch((err, v) => {
+	  value.notifyOfExternalUpdate(v === 1)
+          console.log(v === 1)})
   return thing
 }
 

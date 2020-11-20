@@ -17,4 +17,4 @@ function runServer () {
   server.start().catch(console.error)
 }
 
-runServer()
+module.exports = { runServer }
