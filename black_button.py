@@ -1,9 +1,21 @@
 from gpiozero import Button
 from webthing import (Property, Thing, Value)
+import asyncio
+import tornado.ioloop
+import tornado.gen
+import threading
 
-def updateValue(button, value):
-    newValue = True if button.value == 1 else False
-    value.notify_of_external_update(newValue)
+def update_button_value_in_loop(button, value, state, loop):
+    print(state)
+    loop.call_soon_threadsafe(lambda: value.notify_of_external_update(state))
+
+def update_value(value, state):
+    print('update button value ')
+    value.notify_of_external_update(state)
+
+def update_button_value_in_ioloop(button, value, state, loop):
+    print(state)
+    loop.spawn_callback(lambda: update_value(value, state))
 
 def make_black_button(pin):
     thing = Thing(
@@ -12,20 +24,22 @@ def make_black_button(pin):
         ['PushButton'],
         'kitchen black button'
     )
-    value = Value(True)
+    value = Value(False)
     thing.add_property(
         Property(thing,
-                 'push-button',
+                 'pushed',
                  value,
                  metadata={
-                     '@type': 'PushButton',
-                     'title': 'black-button',
+                     '@type': 'PushedProperty',
+                     'title': 'Pushed',
                      'type': 'boolean',
                      'description': 'Whether the button is pressed',
                      'readOnly': True,
                  }))
     button = Button(pin)
-    button.when_pressed = lambda: updateValue(button, value)
-
+    # loop = asyncio.get_event_loop()
+    loop = tornado.ioloop.IOLoop.current()
+    action = lambda is_pressed: update_button_value_in_ioloop(button, value, is_pressed, loop)
+    button.when_pressed = lambda: action(False)
+    button.when_released = lambda: action(True)
     return thing
-
