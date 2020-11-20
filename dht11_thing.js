@@ -8,18 +8,24 @@ const {
 const dht = require('node-dht-sensor')
 
 function read (pin, humidityValue, temperatureValue) {
-  return () => {
+  let shouldStop = false
+	const stop = () => shouldStop = true
+  return function r() {
+	if (shouldStop) {
+	        return
+	}
     dht.read(11, pin, function (error, temperature, humidity) {
       if (error) {
         console.log('error', error)
-        setTimeout(read(pin, humidityValue, temperatureValue), 2000)
+        setTimeout(r, 2000)
         return
       }
       console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
       humidityValue.notifyOfExternalUpdate(humidity)
       temperatureValue.notifyOfExternalUpdate(temperature)
-      setTimeout(read(pin, humidityValue, temperatureValue), 2000)
+      setTimeout(r, 2000)
     })
+	  return stop
   }
 }
 
@@ -67,8 +73,8 @@ function makeDHTThing (pin) {
         unit: 'celsius',
         readOnly: true
       }))
-  read(pin, humidityValue, temperatureValue)()
-  return { humidityThing, temperatureThing }
+  const stop = read(pin, humidityValue, temperatureValue)()
+  return { humidityThing, temperatureThing, stop }
 }
 
 module.exports = { makeDHTThing }
