@@ -7,19 +7,19 @@ const {
 } = require('webthing')
 const dht = require('node-dht-sensor')
 
-function read(pin, humidityValue, temperatureValue) {
+function read (pin, humidityValue, temperatureValue) {
   return () => {
     dht.read(11, pin, function (error, temperature, humidity) {
-    if (error) {
-      console.log('error', error)
+      if (error) {
+        console.log('error', error)
+        setTimeout(read(pin, humidityValue, temperatureValue), 2000)
+        return
+      }
+      console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
+      humidityValue.notifyOfExternalUpdate(humidity)
+      temperatureValue.notifyOfExternalUpdate(temperature)
       setTimeout(read(pin, humidityValue, temperatureValue), 2000)
-      return
-    }
-    console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
-    humidityValue.notifyOfExternalUpdate(humidity)
-    temperatureValue.notifyOfExternalUpdate(temperature)
-    setTimeout(read(pin, humidityValue, temperatureValue), 2000)
-  })
+    })
   }
 }
 
