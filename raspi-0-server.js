@@ -1,3 +1,5 @@
+'use strict'
+
 const {
   MultipleThings,
   WebThingServer
@@ -22,15 +24,11 @@ function runServer () {
     blackButtonThing, redButtonThing,
     kitchenLed1, kitchenLed2, kitchenLed3, kitchenLed4, kitchenLed5, kitchenLed6,
     kitchenBuzzer,
-    kitchenLamp, humidityThing, temperatureThing],
-  'LightAndTempDevice'),
-  8888)
-
+    kitchenLamp, humidityThing, temperatureThing], 'raspi-0'), 8888)
   process.on('SIGINT', () => {
     stop()
     server.stop().then(() => process.exit()).catch(() => process.exit())
   })
-
   server.start().catch(console.error)
 }
 
