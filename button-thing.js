@@ -5,12 +5,12 @@ const {
 } = require('webthing')
 const Gpio = require('onoff').Gpio
 
-function makeBlackButtonThing (pin, asToggle) {
+function makeButtonThing (pin, asToggle, identifier, name) {
   const thing = new Thing(
-    'urn:dev:ops:black-button-0',
-    'kitchen black button',
+    `urn:dev:ops:${identifier}`,
+    name,
     ['PushButton'],
-    'kitchen black button')
+    name)
   const value = new Value(false)
   thing.addProperty(
     new Property(thing, 'pushed', value, {
@@ -46,4 +46,4 @@ function makeBlackButtonThing (pin, asToggle) {
   return thing
 }
 
-module.exports = { makeBlackButtonThing }
+module.exports = { makeButtonThing }
