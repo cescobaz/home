@@ -7,7 +7,7 @@ const Gpio = require('onoff').Gpio
 
 function updateLed (led, inverted) {
   return (v) => {
-    const value = (v && !inverted) ? 1 : 0
+    const value = ((v && !inverted) || (inverted && !v)) ? 1 : 0
     console.log(`led value ${value}`)
     led.writeSync(value)
   }
