@@ -7,7 +7,7 @@ const {
 const { makeLedThing } = require('./led-thing')
 
 function runServer () {
-  const livingLamp = makeLedThing(17, 'living-lamp-0', 'living lamp')
+  const livingLamp = makeLedThing(17, 'living-lamp-0', 'living lamp', true)
   const server = new WebThingServer(new MultipleThings([livingLamp], 'raspi-1'), 8888)
   process.on('SIGINT', () => {
     stop()

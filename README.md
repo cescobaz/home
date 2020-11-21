@@ -1,11 +1,7 @@
 ## Requirements
 
 * npm
-* node
-
-```bash
-sudo apt install libgpiod2
-```
+* node 10
 
 ## Usage
 

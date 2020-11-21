@@ -5,11 +5,15 @@ const {
 } = require('webthing')
 const Gpio = require('onoff').Gpio
 
-function makeLedThing (pin, identifier, name) {
+function makeLedThing (pin, identifier, name, isLight) {
+  const types = ['OnOffSwitch']
+  if (isLight) {
+    types.push('Light')
+  }
   const thing = new Thing(
     `urn:dev:ops:${identifier}`,
     name,
-    ['OnOffSwitch'],
+    types,
     name)
   const lamp = new Gpio(pin, 'out')
   const value = new Value(false, (v) => lamp.writeSync(v ? 1 : 0))
