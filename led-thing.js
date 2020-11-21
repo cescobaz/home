@@ -5,12 +5,12 @@ const {
 } = require('webthing')
 const Gpio = require('onoff').Gpio
 
-function makeLampThing (pin) {
+function makeLedThing (pin, identifier, name) {
   const thing = new Thing(
-    'urn:dev:ops:kitchen-lamp-1234',
-    'kitchen lamp',
+    `urn:dev:ops:${identifier}`,
+    name,
     ['OnOffSwitch'],
-    'kitchen lamp')
+    name)
   const lamp = new Gpio(pin, 'out')
   const value = new Value(false, (v) => lamp.writeSync(v ? 1 : 0))
   thing.addProperty(
@@ -18,9 +18,9 @@ function makeLampThing (pin) {
       '@type': 'OnOffProperty',
       title: 'On/Off',
       type: 'boolean',
-      description: 'Whether the lamp is turned on'
+      description: `Whether the ${name} is turned on`
     }))
   return thing
 }
 
-module.exports = { makeLampThing }
+module.exports = { makeLedThing }
