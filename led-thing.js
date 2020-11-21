@@ -5,6 +5,14 @@ const {
 } = require('webthing')
 const Gpio = require('onoff').Gpio
 
+function updateLed (led, inverted) {
+  return (v) => {
+    const value = (v && !inverted) ? 1 : 0
+    console.log(`led value ${value}`)
+    led.writeSync(value)
+  }
+}
+
 function makeLedThing ({ pin, identifier, name, isLight, inverted }) {
   const types = ['OnOffSwitch']
   if (isLight) {
@@ -15,8 +23,8 @@ function makeLedThing ({ pin, identifier, name, isLight, inverted }) {
     name,
     types,
     name)
-  const lamp = new Gpio(pin, 'out')
-  const value = new Value(false || !!inverted, (v) => lamp.writeSync((v && !inverted) ? 1 : 0))
+  const led = new Gpio(pin, 'out')
+  const value = new Value(false || !!inverted, updateLed(led, inverted))
   thing.addProperty(
     new Property(thing, 'on', value, {
       '@type': 'OnOffProperty',
