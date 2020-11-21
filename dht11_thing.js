@@ -9,11 +9,11 @@ const dht = require('node-dht-sensor')
 
 function read (pin, humidityValue, temperatureValue) {
   let shouldStop = false
-	const stop = () => shouldStop = true
-  return function r() {
-	if (shouldStop) {
-	        return
-	}
+  const stop = () => { shouldStop = true }
+  return function r () {
+    if (shouldStop) {
+      return
+    }
     dht.read(11, pin, function (error, temperature, humidity) {
       if (error) {
         console.log('error', error)
@@ -25,7 +25,7 @@ function read (pin, humidityValue, temperatureValue) {
       temperatureValue.notifyOfExternalUpdate(temperature)
       setTimeout(r, 2000)
     })
-	  return stop
+    return stop
   }
 }
 

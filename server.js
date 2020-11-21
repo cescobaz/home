@@ -15,7 +15,7 @@ function runServer () {
   8888)
 
   process.on('SIGINT', () => {
-	  stop()
+    stop()
     server.stop().then(() => process.exit()).catch(() => process.exit())
   })
 

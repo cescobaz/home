@@ -21,23 +21,28 @@ function makeBlackButtonThing (pin, asToggle) {
       readOnly: true
     }))
   const button = new Gpio(pin, 'in', 'both')
-	let toggle = false
-	let previousValue = false
-	let newValue = false
-  button.watch((err, v) => {
-	  console.log(asToggle, toggle, v)
-	  if (asToggle && v === 0) {
-		  toggle = !toggle
-		  newValue = toggle
-	  } else if (!asToggle) {
-		  newValue = v === 1
-	  }
-	  if (newValue !== previousValue) {
-                  console.log('button to value ' + newValue)
-		  value.notifyOfExternalUpdate(newValue)
-	          previousValue = newValue
-	  }
-          })
+  let toggle = false
+  let previousValue = false
+  let newValue = false
+  button.watch((error, v) => {
+    if (error) {
+      console.log('error', error)
+      value.notifyOfExternalUpdate(false)
+      return
+    }
+    console.log(asToggle, toggle, v)
+    if (asToggle && v === 0) {
+      toggle = !toggle
+      newValue = toggle
+    } else if (!asToggle) {
+      newValue = v === 1
+    }
+    if (newValue !== previousValue) {
+      console.log('button to value ' + newValue)
+      value.notifyOfExternalUpdate(newValue)
+      previousValue = newValue
+    }
+  })
   return thing
 }
 
