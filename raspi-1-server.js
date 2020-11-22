@@ -25,24 +25,14 @@ function takeSnapshot (destinationPath) {
 
 function runServer () {
   const livingLamp = makeLedThing({ pin: 16, identifier: 'living-lamp-0', name: 'living lamp', isLight: true, inverted: true })
-  const picamera = makeVideoCameraHLS({
+  const { videoCamera, mediaRoute } = makeVideoCameraHLS({
     identifier: 'living-camera-0',
     name: 'living camera',
     hlsFilename: 'playlist.m3u8',
     imageFilename,
     takeSnapshot: () => takeSnapshot(`${mediaDirectory}/${imageFilename}`)
   })
-  const routes = [
-    {
-      path: '/snapshot.jpg',
-      handler: (req, res, next) => {
-        res.download('/tmp/hls/snapshot.jpg', function (err) {
-          if (err) return next(err)
-        })
-      }
-    }
-  ]
-  const server = new WebThingServer(new MultipleThings([livingLamp, picamera], 'raspi-1'), 8888, null, null, routes)
+  const server = new WebThingServer(new MultipleThings([livingLamp, videoCamera], 'raspi-1'), 8888, null, null, [mediaRoute])
   process.on('SIGINT', () => {
     Promise.race([
       server.stop(),
