@@ -11,7 +11,7 @@ const { makeLedThing } = require('./led-thing')
 function runServer () {
   const blackButtonThing = makeButtonThing(7, true, 'black-button-0', 'kitchen black button')
   const redButtonThing = makeButtonThing(25, true, 'red-button-0', 'kitchen red button')
-  const kitchenLamp = makeLedThing({ pin: 24, identifier: 'kitchen-lamp-0', name: 'kitchen lamp', isLight: true })
+  const kitchenLamp = makeLedThing({ pin: 24, identifier: 'kitchen-lamp-0', name: 'kitchen lamp', isLight: true, inverted: true })
   const kitchenBuzzer = makeLedThing({ pin: 8, identifier: 'kitchen-buzzer-0', name: 'kitchen buzzer' })
   const kitchenLed1 = makeLedThing({ pin: 11, identifier: 'kitchen-led-green-1', name: 'kitchen led green 1', isLight: true })
   const kitchenLed2 = makeLedThing({ pin: 9, identifier: 'kitchen-led-green-2', name: 'kitchen led green 2', isLight: true })
