@@ -24,7 +24,7 @@ function makeDHTThing (pin) {
   const humidityThing = new Thing(
     'urn:dev:ops:kitchen-humidity-sensor-1234',
     'kitchen humidity',
-    ['MultiLevelSensor', 'HumiditySensor'],
+    ['MultiLevelSensor'],
     'A web connected humidity sensor'
   )
   const temperatureThing = new Thing(
@@ -43,20 +43,6 @@ function makeDHTThing (pin) {
         '@type': 'LevelProperty',
         title: 'Humidity',
         type: 'number',
-        description: 'The current humidity in %',
-        minimum: 0,
-        maximum: 100,
-        unit: 'percent',
-        readOnly: true
-      }))
-  humidityThing.addProperty(
-    new Property(humidityThing,
-      'humidity',
-      humidityValue,
-      {
-        '@type': 'HumidityProperty',
-        type: 'number',
-        title: 'Humidity',
         description: 'The current humidity in %',
         minimum: 0,
         maximum: 100,
