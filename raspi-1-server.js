@@ -11,7 +11,7 @@ const mediaDirectory = '/tmp/webthing-camera-media'
 const imageFilename = 'snapshot.jpg'
 
 function runServer () {
-  const livingLamp = makeLedThing({ pin: 16, identifier: 'living-lamp-0', name: 'living lamp', isLight: true, inverted: true })
+  const livingLamp = makeLedThing({ pin: 18, identifier: 'living-lamp-0', name: 'living lamp', isLight: true, inverted: true })
   const { videoCamera, mediaRoute } = makeVideoCameraHLS({
     identifier: 'living-camera-0',
     name: 'living camera',
