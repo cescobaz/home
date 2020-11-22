@@ -5,23 +5,10 @@ const {
   WebThingServer
 } = require('webthing')
 const { makeLedThing } = require('./led-thing')
-const { makeVideoCameraHLS } = require('./video-camera-hls')
-const { exec } = require('child_process')
+const { makeVideoCameraHLS, takeSnapshotRaspi } = require('./video-camera-hls')
 
 const mediaDirectory = '/tmp/hls'
 const imageFilename = 'snapshot.jpg'
-
-function takeSnapshot (destinationPath) {
-  return new Promise((resolve, reject) => {
-    exec(`raspistill -o "${destinationPath}"`, (error) => {
-      if (error) {
-        reject(error)
-        return
-      }
-      resolve(destinationPath)
-    })
-  })
-}
 
 function runServer () {
   const livingLamp = makeLedThing({ pin: 16, identifier: 'living-lamp-0', name: 'living lamp', isLight: true, inverted: true })
@@ -31,7 +18,11 @@ function runServer () {
     hlsFilename: 'playlist.m3u8',
     imageFilename,
     mediaDirectory,
-    takeSnapshot: () => takeSnapshot(`${mediaDirectory}/${imageFilename}`)
+    takeSnapshot: () => {
+      const now = new Date()
+      const destinationPath = `${mediaDirectory}/snapshot-${now}.jpg`
+      takeSnapshotRaspi(destinationPath)
+    }
   })
   const server = new WebThingServer(new MultipleThings([livingLamp, videoCamera], 'raspi-1'), 8888, null, null, [mediaRoute])
   process.on('SIGINT', () => {

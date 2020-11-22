@@ -5,6 +5,19 @@ const {
   Thing,
   Value
 } = require('webthing')
+const { exec } = require('child_process')
+
+function takeSnapshotRaspi (destinationPath) {
+  return new Promise((resolve, reject) => {
+    exec(`raspistill -o "${destinationPath}"`, (error) => {
+      if (error) {
+        reject(error)
+        return
+      }
+      resolve(destinationPath)
+    })
+  })
+}
 
 function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, mediaDirectory, takeSnapshot }) {
   const thing = new Thing(
@@ -33,8 +46,8 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, med
     handler: (req, res, next) => {
       const requestedFile = req.params.file
       if (requestedFile === imageFilename) {
-        takeSnapshot().then(() => {
-          res.download(`${mediaDirectory}/${requestedFile}`, function (err) {
+        takeSnapshot().then((filePath) => {
+          res.download(filePath, function (err) {
             if (err) return next(err)
           })
         }).catch(console.log)
@@ -48,4 +61,4 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, med
   return { videoCamera: thing, mediaRoute }
 }
 
-module.exports = { makeVideoCameraHLS }
+module.exports = { makeVideoCameraHLS, takeSnapshotRaspi }
