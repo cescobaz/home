@@ -8,7 +8,7 @@ function main () {
     process.exit(1)
   }
 
-  const { runServer } = require(`./${args[2]}`)
+  const { runServer } = require(`./src/${args[2]}`)
 
   runServer()
 }
