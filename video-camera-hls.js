@@ -5,7 +5,7 @@ const {
   Thing,
   Value
 } = require('webthing')
-const { exec } = require('child_process')
+const { exec, spawn } = require('child_process')
 
 function takeSnapshotRaspi (destinationPath) {
   return new Promise((resolve, reject) => {
@@ -20,11 +20,14 @@ function takeSnapshotRaspi (destinationPath) {
 }
 
 function startDashVideoStreaming (destinationDirectory) {
-  return exec(`scripts/raspi-camera-dash-start.sh "${destinationDirectory}"`, (error) => {
-    if (error) {
+  const child = spawn('scripts/raspi-camera-dash-start.sh', [destinationDirectory])
+  child.on('error', (error) => {
       console.log('startDashVideoStreaming error', error)
-    }
   })
+  child.on('exit', (code) => {
+	  console.log('startDashVideoStreaming exited', code)
+  })
+	return child
 }
 
 function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imageFilename, mediaDirectory, takeSnapshot }) {
@@ -51,10 +54,12 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
   let childProcess = null
   const streamingValue = new Value(false, (v) => {
     if (childProcess) {
+	    console.log('videoCamera killing streaming process')
       childProcess.kill()
       childProcess = null
     }
     if (v) {
+	    console.log('videoCamera starting streaming process')
       childProcess = startDashVideoStreaming(mediaDirectory)
     }
   })
