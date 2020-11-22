@@ -4,9 +4,10 @@ const {
   MultipleThings,
   WebThingServer
 } = require('webthing')
-const { makeButtonThing } = require('./src/lib/button-thing')
-const { makeDHTThing } = require('./src/lib/dht11-thing')
-const { makeLedThing } = require('./src/lib/led-thing')
+const { makeButtonThing } = require('./lib/button-thing')
+const { makeDHTThing } = require('./lib/dht11-thing')
+const { makeLedThing } = require('./lib/led-thing')
+>>>>>>> parent of 4c6eedd... files re-organized:raspi-0-server.js
 
 function runServer () {
   const blackButtonThing = makeButtonThing(7, true, 'black-button-0', 'kitchen black button')
