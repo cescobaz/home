@@ -19,18 +19,27 @@ function takeSnapshotRaspi (destinationPath) {
   })
 }
 
-function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, mediaDirectory, takeSnapshot }) {
+function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imageFilename, mediaDirectory, takeSnapshot }) {
   const thing = new Thing(
     `urn:dev:ops:${identifier}`,
     name,
     ['VideoCamera', 'Camera'],
     name)
   const videoValue = new Value(null)
+	const links = []
+	if (dashFilename) {
+links.push(
+	      { rel: 'alternate', mediaType: 'application/dash+xml', href: `/media/${dashFilename}` })
+	}
+	if (hlsFilename) {
+links.push(
+	      { rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', href: `/media/${hlsFilename}` })
+	}
   thing.addProperty(
     new Property(thing, 'video', videoValue, {
       '@type': 'VideoProperty',
       title: 'Streaming',
-      links: [{ rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', href: `/media/${hlsFilename}` }],
+      links,
       readOnly: true
     }))
   const imageValue = new Value(null)
@@ -45,6 +54,7 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, med
     path: '/media/:file(*)',
     handler: (req, res, next) => {
       const requestedFile = req.params.file
+      console.log('media route requested file', requestedFile)
       if (requestedFile === imageFilename) {
         takeSnapshot().then((filePath) => {
           res.download(filePath, function (err) {
