@@ -26,15 +26,13 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
     ['VideoCamera', 'Camera'],
     name)
   const videoValue = new Value(null)
-	const links = []
-	if (dashFilename) {
-links.push(
-	      { rel: 'alternate', mediaType: 'application/dash+xml', href: `/media/${dashFilename}` })
-	}
-	if (hlsFilename) {
-links.push(
-	      { rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', href: `/media/${hlsFilename}` })
-	}
+  const links = []
+  if (dashFilename) {
+    links.push({ rel: 'alternate', mediaType: 'application/dash+xml', href: `/media/${dashFilename}` })
+  }
+  if (hlsFilename) {
+    links.push({ rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', href: `/media/${hlsFilename}` })
+  }
   thing.addProperty(
     new Property(thing, 'video', videoValue, {
       '@type': 'VideoProperty',

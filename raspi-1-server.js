@@ -15,7 +15,7 @@ function runServer () {
   const { videoCamera, mediaRoute } = makeVideoCameraHLS({
     identifier: 'living-camera-0',
     name: 'living camera',
-	  dashFilename: 'playlist.mpd',
+    dashFilename: 'playlist.mpd',
     hlsFilename: 'playlist.m3u8',
     imageFilename,
     mediaDirectory,
