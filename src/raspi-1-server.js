@@ -4,8 +4,8 @@ const {
   MultipleThings,
   WebThingServer
 } = require('webthing')
-const { makeLedThing } = require('./led-thing')
-const { makeVideoCameraHLS, takeSnapshotRaspi } = require('./video-camera-hls')
+const { makeLedThing } = require('./lib/led-thing')
+const { makeVideoCameraHLS, takeSnapshotRaspi } = require('./lib/video-camera-hls')
 const fs = require('fs')
 
 const mediaDirectory = '/tmp/webthing-camera-media'

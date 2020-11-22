@@ -4,9 +4,9 @@ const {
   MultipleThings,
   WebThingServer
 } = require('webthing')
-const { makeButtonThing } = require('./button-thing')
-const { makeDHTThing } = require('./dht11-thing')
-const { makeLedThing } = require('./led-thing')
+const { makeButtonThing } = require('./lib/button-thing')
+const { makeDHTThing } = require('./lib/dht11-thing')
+const { makeLedThing } = require('./lib/led-thing')
 
 function runServer () {
   const blackButtonThing = makeButtonThing(7, true, 'black-button-0', 'kitchen black button')
