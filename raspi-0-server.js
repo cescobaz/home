@@ -26,8 +26,11 @@ function runServer () {
     kitchenBuzzer,
     kitchenLamp, humidityThing, temperatureThing], 'raspi-0'), 8888)
   process.on('SIGINT', () => {
-    stop()
-    server.stop().then(() => process.exit()).catch(() => process.exit())
+    Promise.race([
+      stop(),
+      server.stop(),
+      new Promise((resolve) => setTimeout(resolve, 2000))
+    ]).finally(() => process.exit())
   })
   server.start().catch(console.error)
 }
