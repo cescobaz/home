@@ -22,12 +22,12 @@ function takeSnapshotRaspi (destinationPath) {
 function startDashVideoStreaming (destinationDirectory) {
   const child = spawn('scripts/raspi-camera-dash-start.sh', [destinationDirectory])
   child.on('error', (error) => {
-      console.log('startDashVideoStreaming error', error)
+    console.log('startDashVideoStreaming error', error)
   })
   child.on('exit', (code) => {
-	  console.log('startDashVideoStreaming exited', code)
+    console.log('startDashVideoStreaming exited', code)
   })
-	return child
+  return child
 }
 
 function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imageFilename, mediaDirectory, takeSnapshot }) {
@@ -54,12 +54,12 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
   let childProcess = null
   const streamingValue = new Value(false, (v) => {
     if (childProcess) {
-	    console.log('videoCamera killing streaming process')
+      console.log('videoCamera killing streaming process')
       childProcess.kill()
       childProcess = null
     }
     if (v) {
-	    console.log('videoCamera starting streaming process')
+      console.log('videoCamera starting streaming process')
       childProcess = startDashVideoStreaming(mediaDirectory)
     }
   })
