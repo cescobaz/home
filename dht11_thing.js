@@ -34,13 +34,13 @@ function makeDHTThing (pin) {
   const humidityThing = new Thing(
     'urn:dev:ops:kitchen-humidity-sensor-1234',
     'kitchen humidity',
-    ['MultiLevelSensor'],
+    ['MultiLevelSensor', 'HumiditySensor'],
     'A web connected humidity sensor'
   )
   const temperatureThing = new Thing(
     'urn:dev:ops:kitchen-temperature-sensor-1234',
     'kitchen temperature',
-    ['MultiLevelSensor'],
+    ['MultiLevelSensor', 'TemperatureSensor'],
     'A web connected temperature sensor'
   )
   const humidityValue = new Value(0.0)
