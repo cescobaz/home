@@ -20,25 +20,25 @@ function takeSnapshotRaspi (destinationPath) {
 }
 
 function startDashVideoStreaming (destinationDirectory) {
-	return new Promise((resolve, reject) => {
-		let pid = null
-  const child = spawn('scripts/raspi-camera-dash-start.sh', [destinationDirectory])
-		child.stdout.on('data', (data) => {
-			  console.log(`startDashVideoStreaming Received chunk ${data}`);
-			pid = data
-		});
-  child.on('error', (error) => {
-    console.log('startDashVideoStreaming error',pid,  error)
-	  resolve(pid)
+  return new Promise((resolve, reject) => {
+    let pid = null
+    const child = spawn('scripts/raspi-camera-dash-start.sh', [destinationDirectory])
+    child.stdout.on('data', (data) => {
+      console.log(`startDashVideoStreaming Received chunk ${data}`)
+      pid = data
+    })
+    child.on('error', (error) => {
+      console.log('startDashVideoStreaming error', pid, error)
+      resolve(pid)
+    })
+    child.on('exit', (code) => {
+      console.log('startDashVideoStreaming exited', pid, code)
+      resolve(pid)
+    })
   })
-  child.on('exit', (code) => {
-    console.log('startDashVideoStreaming exited', pid, code)
-	  resolve(pid)
-  })
-	})
 }
 
-function kill(pid) {
+function kill (pid) {
   return new Promise((resolve, reject) => {
     exec(`kill "${pid}"`, (error) => {
       if (error) {
@@ -48,7 +48,6 @@ function kill(pid) {
       resolve(pid)
     })
   })
-
 }
 
 function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imageFilename, mediaDirectory, takeSnapshot }) {
@@ -72,28 +71,28 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
       links,
       readOnly: true
     }))
-	let waiting = false
+  let waiting = false
   let pid = null
   const streamingValue = new Value(false, (v) => {
-	  if (waiting) {
-		  return
-	  }
+    if (waiting) {
+      return !v
+    }
     if (pid) {
       console.log('videoCamera killing streaming process')
-	    kill(pid)
-	    pid = 0
+      kill(pid)
+      pid = 0
     }
     if (v) {
       console.log('videoCamera starting streaming process')
-	    waiting = true
-	    startDashVideoStreaming(mediaDirectory).then((newPid) => {
-		    waiting = false
-		    pid = newPid
-	    }).catch(error => {
-		    console.log(error)
-		    waiting = false
-		    pid = null
-	    })
+      waiting = true
+      startDashVideoStreaming(mediaDirectory).then((newPid) => {
+        waiting = false
+        pid = newPid
+      }).catch(error => {
+        console.log(error)
+        waiting = false
+        pid = null
+      })
     }
   })
   thing.addProperty(
