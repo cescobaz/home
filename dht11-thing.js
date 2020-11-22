@@ -64,7 +64,7 @@ function makeDHTThing (pin) {
       'level',
       temperatureValue,
       {
-        '@type': 'LevelProperty',
+        '@type': 'TemperatureProperty',
         title: 'Temperature',
         type: 'number',
         description: 'The current temperature in °C',
