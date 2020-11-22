@@ -109,17 +109,30 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
       links: [{ rel: 'alternate', mediaType: 'image/jpeg', href: `/media/${imageFilename}` }],
       readOnly: true
     }))
+  const snapshotingValue = new Value(false)
+  thing.addProperty(
+    new Property(thing, 'snapshoting', snapshotingValue, {
+      '@type': 'OnOffProperty',
+      type: 'boolean',
+      title: 'Snapshoting',
+      readOnly: true
+    }))
   const mediaRoute = {
     path: '/media/:file(*)',
     handler: (req, res, next) => {
       const requestedFile = req.params.file
       console.log('media route requested file', requestedFile)
       if (requestedFile === imageFilename) {
+        snapshotingValue.notifyOfExternalUpdate(true)
         takeSnapshot().then((filePath) => {
+          snapshotingValue.notifyOfExternalUpdate(false)
           res.download(filePath, function (err) {
             if (err) return next(err)
           })
-        }).catch(console.log)
+        }).catch(error => {
+          snapshotingValue.notifyOfExternalUpdate(false)
+          console.log(error)
+        })
         return
       }
       res.download(`${mediaDirectory}/${requestedFile}`, function (err) {
