@@ -7,7 +7,7 @@ const {
 const { makeLedThing } = require('./led-thing')
 const { makeVideoCameraHLS, takeSnapshotRaspi } = require('./video-camera-hls')
 
-const mediaDirectory = '/tmp/hls'
+const mediaDirectory = '/tmp/webthing-camera-media'
 const imageFilename = 'snapshot.jpg'
 
 function runServer () {
