@@ -8,25 +8,15 @@ const {
 const dht = require('node-dht-sensor')
 
 function read (pin, humidityValue, temperatureValue) {
-  let shouldStop = false
-  const stop = () => { shouldStop = true }
-  return function r () {
-    if (shouldStop) {
+  dht.read(11, pin, function (error, temperature, humidity) {
+    if (error) {
+      console.log('error', error)
       return
     }
-    dht.read(11, pin, function (error, temperature, humidity) {
-      if (error) {
-        console.log('error', error)
-        setTimeout(r, 2000)
-        return
-      }
-      console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
-      humidityValue.notifyOfExternalUpdate(humidity)
-      temperatureValue.notifyOfExternalUpdate(temperature)
-      setTimeout(r, 2000)
-    })
-    return stop
-  }
+    console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
+    humidityValue.notifyOfExternalUpdate(humidity)
+    temperatureValue.notifyOfExternalUpdate(temperature)
+  })
 }
 
 // pin: physical pin
@@ -34,13 +24,13 @@ function makeDHTThing (pin) {
   const humidityThing = new Thing(
     'urn:dev:ops:kitchen-humidity-sensor-1234',
     'kitchen humidity',
-    ['MultiLevelSensor', 'HumiditySensor'],
+    ['HumiditySensor'],
     'A web connected humidity sensor'
   )
   const temperatureThing = new Thing(
     'urn:dev:ops:kitchen-temperature-sensor-1234',
     'kitchen temperature',
-    ['MultiLevelSensor', 'TemperatureSensor'],
+    ['TemperatureSensor'],
     'A web connected temperature sensor'
   )
   const humidityValue = new Value(0.0)
@@ -50,10 +40,8 @@ function makeDHTThing (pin) {
       'level',
       humidityValue,
       {
-        '@type': 'LevelProperty',
-        title: 'Humidity',
+        '@type': 'HumidityProperty',
         type: 'number',
-        description: 'The current humidity in %',
         minimum: 0,
         maximum: 100,
         unit: 'percent',
@@ -65,16 +53,16 @@ function makeDHTThing (pin) {
       temperatureValue,
       {
         '@type': 'TemperatureProperty',
-        title: 'Temperature',
         type: 'number',
-        description: 'The current temperature in °C',
         minimum: -5,
         maximum: 40,
         unit: 'celsius',
         readOnly: true
       }))
-  const stop = read(pin, humidityValue, temperatureValue)()
-  return { humidityThing, temperatureThing, stop }
+  const interval = setInterval(() => {
+    read(pin, humidityValue, temperatureValue)
+  }, 3000)
+  return { humidityThing, temperatureThing, stop: () => clearInterval(interval) }
 }
 
 module.exports = { makeDHTThing }
