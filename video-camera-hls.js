@@ -17,7 +17,7 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, med
     new Property(thing, 'video', videoValue, {
       '@type': 'VideoProperty',
       title: 'Streaming',
-      links: [{ rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', hlsHref: `${mediaDirectory}/${hlsFilename}` }],
+      links: [{ rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', hlsHref: `media/${hlsFilename}` }],
       readOnly: true
     }))
   const imageValue = new Value(null)
@@ -25,7 +25,7 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, med
     new Property(thing, 'image', imageValue, {
       '@type': 'ImageProperty',
       title: 'Snapshot',
-      links: [{ rel: 'alternate', mediaType: 'image/jpeg', href: `${mediaDirectory}/${imageFilename}` }],
+      links: [{ rel: 'alternate', mediaType: 'image/jpeg', href: `media/${imageFilename}` }],
       readOnly: true
     }))
   const mediaRoute = {
