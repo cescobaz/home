@@ -30,6 +30,7 @@ function runServer () {
     name: 'living camera',
     hlsFilename: 'playlist.m3u8',
     imageFilename,
+    mediaDirectory,
     takeSnapshot: () => takeSnapshot(`${mediaDirectory}/${imageFilename}`)
   })
   const server = new WebThingServer(new MultipleThings([livingLamp, videoCamera], 'raspi-1'), 8888, null, null, [mediaRoute])
