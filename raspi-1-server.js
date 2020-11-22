@@ -21,7 +21,7 @@ function runServer () {
     takeSnapshot: () => {
       const now = new Date()
       const destinationPath = `${mediaDirectory}/snapshot-${now}.jpg`
-      takeSnapshotRaspi(destinationPath)
+      return takeSnapshotRaspi(destinationPath)
     }
   })
   const server = new WebThingServer(new MultipleThings([livingLamp, videoCamera], 'raspi-1'), 8888, null, null, [mediaRoute])
