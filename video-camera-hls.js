@@ -19,6 +19,14 @@ function takeSnapshotRaspi (destinationPath) {
   })
 }
 
+function startDashVideoStreaming (destinationDirectory) {
+  return exec(`scripts/raspi-camera-dash-start.sh "${destinationDirectory}"`, (error) => {
+    if (error) {
+      console.log('startDashVideoStreaming error', error)
+    }
+  })
+}
+
 function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imageFilename, mediaDirectory, takeSnapshot }) {
   const thing = new Thing(
     `urn:dev:ops:${identifier}`,
@@ -36,9 +44,25 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
   thing.addProperty(
     new Property(thing, 'video', videoValue, {
       '@type': 'VideoProperty',
-      title: 'Streaming',
+      title: 'Video',
       links,
       readOnly: true
+    }))
+  let childProcess = null
+  const streamingValue = new Value(false, (v) => {
+    if (childProcess) {
+      childProcess.kill()
+      childProcess = null
+    }
+    if (v) {
+      childProcess = startDashVideoStreaming(mediaDirectory)
+    }
+  })
+  thing.addProperty(
+    new Property(thing, 'streaming', streamingValue, {
+      '@type': 'OnOffProperty',
+      type: 'boolean',
+      title: 'Streaming'
     }))
   const imageValue = new Value(null)
   thing.addProperty(
