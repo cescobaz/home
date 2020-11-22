@@ -5,7 +5,7 @@ const {
   WebThingServer
 } = require('webthing')
 const { makeButtonThing } = require('./button-thing')
-const { makeDHTThing } = require('./dht11_thing')
+const { makeDHTThing } = require('./dht11-thing')
 const { makeLedThing } = require('./led-thing')
 
 function runServer () {
