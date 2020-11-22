@@ -45,7 +45,7 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, imageFilename, med
       })
     }
   }
-  return { thing, mediaRoute }
+  return { videoCamera: thing, mediaRoute }
 }
 
 module.exports = { makeVideoCameraHLS }
