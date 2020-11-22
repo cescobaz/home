@@ -9,9 +9,13 @@ const { exec, spawn } = require('child_process')
 
 function takeSnapshotRaspi (destinationPath) {
   return new Promise((resolve, reject) => {
-    exec(`raspistill -o "${destinationPath}"`, (error) => {
-      if (error) {
-        reject(error)
+    const child = spawn('raspistill', ['-o', destinationPath])
+    child.on('error', (error) => {
+      reject(error)
+    })
+    child.on('exit', (code) => {
+      if (code && code !== 0) {
+        reject(new Error('exit code ' + code))
         return
       }
       resolve(destinationPath)
