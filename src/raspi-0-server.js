@@ -21,7 +21,7 @@ function runServer () {
   const kitchenLed5 = makeLedThing({ pin: 17, identifier: 'kitchen-led-red-5', name: 'kitchen led red 5', isLight: true })
   const kitchenLed6 = makeLedThing({ pin: 4, identifier: 'kitchen-led-red-6', name: 'kitchen led red 6', isLight: true })
   const { humidityThing, temperatureThing, stop } = makeDHTThing(18)
-  const { pressureThing, temperatureMPL115A2Thing, stop: stopMPL115A2 } = makeMPL115A2Thing()
+  const { pressureThing, temperatureThing: temperatureMPL115A2Thing, stop: stopMPL115A2 } = makeMPL115A2Thing()
   const server = new WebThingServer(new MultipleThings([
     blackButtonThing, redButtonThing,
     kitchenLed1, kitchenLed2, kitchenLed3, kitchenLed4, kitchenLed5, kitchenLed6,
