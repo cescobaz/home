@@ -70,7 +70,7 @@ function makeMPL115A2Thing () {
       return
     }
     read(mpl115a2, pressureValue, temperatureValue)
-  }, 3000)
+  }, 5000)
   return { pressureThing, temperatureThing, stop: () => clearInterval(interval) }
 }
 

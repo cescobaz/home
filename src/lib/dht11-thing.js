@@ -63,7 +63,7 @@ function makeDHTThing (pin) {
       }))
   const interval = setInterval(() => {
     read(pin, humidityValue, temperatureValue)
-  }, 3000)
+  }, 5000)
   return { humidityThing, temperatureThing, stop: () => clearInterval(interval) }
 }
 
