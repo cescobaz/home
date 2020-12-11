@@ -11,8 +11,9 @@ function read (mpl115a2, pressureValue, temperatureValue) {
   return mpl115a2.convert()
     .then(() => mpl115a2.read())
     .then(({ pressure, temperature }) => {
-      pressureValue.notifyOfExternalUpdate(pressure.value * 10)
-      temperatureValue.notifyOfExternalUpdate(temperature.value)
+      console.log('mpl115a2', 'temperature', temperature.value, mpl115a2.tadc)
+      pressureValue.notifyOfExternalUpdate(Math.round(pressure.value) * 10)
+      temperatureValue.notifyOfExternalUpdate(Math.round(temperature.value))
     })
     .catch(console.log)
 }
