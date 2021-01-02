@@ -8,7 +8,7 @@ Restart=always
 RestartSec=3
 User=pi
 WorkingDirectory=/home/pi/webthing-home
-ExecStart=/home/pi/webthing-home/scripts/run
+ExecStart=/home/pi/webthing-home/scripts/run node
 
 [Install]
 WantedBy=multi-user.target
