@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+WEBTHINGS_HOME=$(dirname $(realpath $0))
+
+cd "${WEBTHINGS_HOME}"
+node "${WEBTHINGS_HOME}/index.js" "$(hostname)-server"

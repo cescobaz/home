@@ -1,0 +1,14 @@
+[Unit]
+Description=WebThings Home Service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+User=pi
+WorkingDirectory=/home/pi/webthing-home
+ExecStart=/home/pi/webthing-home/scripts/run
+
+[Install]
+WantedBy=multi-user.target
