@@ -1,9 +1,10 @@
 #!/bin/sh
 
-set -e
+set -ex
 
 DESTINATION=${1:-'/tmp/webthing-camera-media'}
 mkdir -p "$DESTINATION"
+shift
 # keep last X hours so:
 HOURS_TO_KEEP=3
 SEG_DURATION=3
@@ -20,12 +21,13 @@ raspivid --nopreview \
 	--level 4 \
 	-fps $FPS \
 	--shutter 99900 \
-	--exposure night \
 	--drc high \
+	--exposure night \
 	--width $WIDTH \
 	--height $HEIGHT \
 	--mode 2 \
 	-a 12 \
+	$@ \
 	-o - | ffmpeg \
 	-framerate $FPS \
 	-i - -vcodec copy -an \
