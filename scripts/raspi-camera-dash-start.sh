@@ -27,10 +27,11 @@ raspivid --nopreview \
 	-a 12 \
 	-o - | ffmpeg \
 	-i - -vcodec copy -an \
+	-r 10 \
 	-f dash \
 	-seg_duration $SEG_DURATION \
 	-window_size $WINDOW_SIZE \
 	-streaming 1 \
-	"$DESTINATION/playlist.mpd"
+	"$DESTINATION/playlist.mpd" &
 
 echo $!
