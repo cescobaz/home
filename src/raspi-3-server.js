@@ -4,7 +4,8 @@ const {
   MultipleThings,
   WebThingServer
 } = require('webthing')
-const { makeVideoCamera, takeSnapshotRaspi } = require('./lib/video-camera')
+const { makeLedThing } = require('./lib/led-thing')
+const { makeVideoCameraHLS, takeSnapshotRaspi } = require('./lib/video-camera')
 const fs = require('fs')
 
 const mediaDirectory = '/tmp/webthing-camera-media'
@@ -12,7 +13,7 @@ const imageFilename = 'snapshot.jpg'
 
 function runServer () {
   fs.mkdir(mediaDirectory, { recursive: true }, console.log)
-  const { videoCamera, mediaRoute } = makeVideoCamera({
+  const { videoCamera, mediaRoute } = makeVideoCameraHLS({
     identifier: 'bedroom-camera-0',
     name: 'bedroom camera',
     dashFilename: 'playlist.mpd',
