@@ -26,10 +26,13 @@ function takeSnapshotRaspi (destinationPath, args) {
   })
 }
 
-function startDashVideoStreaming (destinationDirectory) {
+function startDashVideoStreaming (destinationDirectory, args) {
+  if (!Array.isArray(args)) {
+    args = []
+  }
   return new Promise((resolve, reject) => {
     let pid = null
-    const child = spawn('scripts/raspi-camera-dash-start.sh', [destinationDirectory])
+    const child = spawn('scripts/raspi-camera-dash-start.sh', [destinationDirectory].concat(args))
     child.stdout.on('data', (data) => {
       console.log(`startDashVideoStreaming Received chunk ${data}`)
       pid = data
@@ -57,7 +60,7 @@ function kill (pid) {
   })
 }
 
-function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imageFilename, mediaDirectory, takeSnapshot }) {
+function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imageFilename, mediaDirectory, takeSnapshot, videoArgs }) {
   const thing = new Thing(
     `urn:dev:ops:${identifier}`,
     name,
@@ -92,7 +95,7 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
     if (v) {
       console.log('videoCamera starting streaming process')
       waiting = true
-      startDashVideoStreaming(mediaDirectory).then((newPid) => {
+      startDashVideoStreaming(mediaDirectory, videoArgs).then((newPid) => {
         waiting = false
         pid = newPid
       }).catch(error => {

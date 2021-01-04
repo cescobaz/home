@@ -22,7 +22,8 @@ function runServer () {
       const now = new Date()
       const destinationPath = `${mediaDirectory}/snapshot-${now}.jpg`
       return takeSnapshotRaspi(destinationPath, ['--exposure', 'night', '--awb', 'greyworld'])
-    }
+    },
+    videoArgs: ['--awb', 'greyworld']
   })
   const server = new WebThingServer(new MultipleThings([videoCamera], 'raspi-3'), 8888, null, null, [mediaRoute])
   process.on('SIGINT', () => {
