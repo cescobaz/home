@@ -7,9 +7,12 @@ const {
 } = require('webthing')
 const { exec, spawn } = require('child_process')
 
-function takeSnapshotRaspi (destinationPath) {
+function takeSnapshotRaspi (destinationPath, args) {
+  if (!Array.isArray(args)) {
+    args = []
+  }
   return new Promise((resolve, reject) => {
-    const child = spawn('raspistill', ['--exposure', 'night', '-o', destinationPath])
+    const child = spawn('raspistill', args.concat(['-o', destinationPath]))
     child.on('error', (error) => {
       reject(error)
     })

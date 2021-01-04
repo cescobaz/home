@@ -4,7 +4,6 @@ const {
   MultipleThings,
   WebThingServer
 } = require('webthing')
-const { makeLedThing } = require('./lib/led-thing')
 const { makeVideoCameraHLS, takeSnapshotRaspi } = require('./lib/video-camera')
 const fs = require('fs')
 
@@ -22,7 +21,7 @@ function runServer () {
     takeSnapshot: () => {
       const now = new Date()
       const destinationPath = `${mediaDirectory}/snapshot-${now}.jpg`
-      return takeSnapshotRaspi(destinationPath)
+      return takeSnapshotRaspi(destinationPath, ['--exposure', 'night', '--awb', 'greyworld'])
     }
   })
   const server = new WebThingServer(new MultipleThings([videoCamera], 'raspi-3'), 8888, null, null, [mediaRoute])
