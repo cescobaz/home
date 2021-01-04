@@ -9,7 +9,7 @@ const { exec, spawn } = require('child_process')
 
 function takeSnapshotRaspi (destinationPath) {
   return new Promise((resolve, reject) => {
-    const child = spawn('raspistill', ['-o', destinationPath])
+    const child = spawn('raspistill', ['--exposure', 'night', '-o', destinationPath])
     child.on('error', (error) => {
       reject(error)
     })
