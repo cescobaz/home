@@ -25,7 +25,7 @@ function runServer (locationName, hostname) {
       return takeSnapshotRaspi(destinationPath, ['--exposure', 'night'])
     }
   })
-  const server = new WebThingServer(new MultipleThings([led], hostname), 8888, null, null, [mediaRoute])
+  const server = new WebThingServer(new MultipleThings([videoCamera], hostname), 8888, null, null, [mediaRoute])
   process.on('SIGINT', () => {
     Promise.race([
       server.stop(),
