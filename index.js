@@ -8,9 +8,22 @@ function main () {
     process.exit(1)
   }
 
-  const { runServer } = require(`./src/${args[2]}`)
+  const { createServer } = require(`./src/${args[2]}`)
 
-  runServer()
+  const { dispose, server } = createServer()
+
+  process.on('SIGINT', () => {
+    Promise.race([
+      Promise.all([server.stop(), dispose()]),
+      new Promise((resolve) => setTimeout(resolve, 2000))
+    ]).finally(() => process.exit())
+  })
+
+  return server.start()
 }
 
 main()
+  .catch(error => {
+    console.log(error)
+    process.exit(1)
+  })

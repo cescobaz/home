@@ -9,7 +9,7 @@ const { makeDHTThing } = require('./lib/dht11-thing')
 const { makeLedThing } = require('./lib/led-thing')
 const { makeMPL115A2Thing } = require('./lib/mpl115a2-thing')
 
-function runServer () {
+function createServer () {
   const blackButtonThing = makeButtonThing(7, true, 'black-button-0', 'kitchen black button')
   const redButtonThing = makeButtonThing(25, true, 'red-button-0', 'kitchen red button')
   const kitchenLamp = makeLedThing({ pin: 24, identifier: 'kitchen-lamp-0', name: 'kitchen lamp', isLight: true, inverted: true })
@@ -29,15 +29,8 @@ function runServer () {
     kitchenLamp,
     humidityThing, temperatureThing,
     pressureThing, temperatureMPL115A2Thing], 'raspi-0'), 8888)
-  process.on('SIGINT', () => {
-    Promise.race([
-      stop(),
-      stopMPL115A2(),
-      server.stop(),
-      new Promise((resolve) => setTimeout(resolve, 2000))
-    ]).finally(() => process.exit())
-  })
-  server.start().catch(console.error)
+  const dispose = () => Promise.all([stop(), stopMPL115A2()])
+  return { dispose, server }
 }
 
-module.exports = { runServer }
+module.exports = { createServer }

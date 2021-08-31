@@ -2,8 +2,8 @@
 
 const server = require('./only-camera-server')
 
-function runServer () {
-  server.runServer('bedroom-ceil', 'raspi-3')
+function createServer () {
+  return server.createServer('bedroom-ceil', 'raspi-3')
 }
 
-module.exports = { runServer }
+module.exports = { createServer }

@@ -12,7 +12,7 @@ const fs = require('fs')
 const mediaDirectory = '/tmp/webthing-camera-media'
 const imageFilename = 'snapshot.jpg'
 
-function runServer () {
+function createServer () {
   fs.mkdir(mediaDirectory, { recursive: true }, console.log)
   const livingLamp = makeLedThing({ pin: 17, identifier: 'living-lamp-0', name: 'living lamp', isLight: true, inverted: true })
   const motionSensor = makeMotionSensorThing(27, 'motion-sensor-living-0', 'living motion sensor')
@@ -29,13 +29,8 @@ function runServer () {
     }
   })
   const server = new WebThingServer(new MultipleThings([livingLamp, videoCamera, motionSensor], 'raspi-1'), 8888, null, null, [mediaRoute])
-  process.on('SIGINT', () => {
-    Promise.race([
-      server.stop(),
-      new Promise((resolve) => setTimeout(resolve, 2000))
-    ]).finally(() => process.exit())
-  })
-  server.start().catch(console.error)
+  const dispose = () => Promise.resolve()
+  return { dispose, server }
 }
 
-module.exports = { runServer }
+module.exports = { createServer }
