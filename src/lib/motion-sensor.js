@@ -33,7 +33,7 @@ function makeMotionSensorThing (pin, identifier, name) {
     }
     newValue = v === 1
     if (newValue !== previousValue) {
-      console.log('button to value ' + newValue)
+      console.log('motion sensor to value', newValue)
       value.notifyOfExternalUpdate(newValue)
       previousValue = newValue
     }
