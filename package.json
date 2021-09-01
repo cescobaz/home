@@ -26,7 +26,7 @@
     "mpl115a2-i2c": "0.0.5",
     "node-dht-sensor": "^0.4.3",
     "onoff": "^6.0.1",
-    "webthing": "^0.13.0"
+    "webthing": "^0.15.0"
   },
   "devDependencies": {
     "eslint": "^7.13.0",
