@@ -66,19 +66,19 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
     name,
     ['VideoCamera', 'Camera'],
     name)
-  const videoValue = new Value(null)
-  const links = []
+  const videoLinks = []
   if (dashFilename) {
-    links.push({ rel: 'alternate', mediaType: 'application/dash+xml', href: `/media/${dashFilename}` })
+    videoLinks.push({ rel: 'alternate', mediaType: 'application/dash+xml', href: `/media/${dashFilename}` })
   }
   if (hlsFilename) {
-    links.push({ rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', href: `/media/${hlsFilename}` })
+    videoLinks.push({ rel: 'alternate', mediaType: 'application/vnd.apple.mpegurl', href: `/media/${hlsFilename}` })
   }
+  console.log('video-camera', { videoLinks })
+  const videoValue = new Value(videoLinks)
   thing.addProperty(
     new Property(thing, 'video', videoValue, {
       '@type': 'VideoProperty',
       title: 'Video',
-      links,
       readOnly: true
     }))
   let waiting = false
@@ -111,12 +111,13 @@ function makeVideoCameraHLS ({ identifier, name, hlsFilename, dashFilename, imag
       type: 'boolean',
       title: 'Streaming'
     }))
-  const imageValue = new Value(null)
+  const imageLinks = [{ rel: 'alternate', mediaType: 'image/jpeg', href: `/media/${imageFilename}` }]
+  console.log('video-camera', { imageLinks })
+  const imageValue = new Value(imageLinks)
   thing.addProperty(
     new Property(thing, 'image', imageValue, {
       '@type': 'ImageProperty',
       title: 'Snapshot',
-      links: [{ rel: 'alternate', mediaType: 'image/jpeg', href: `/media/${imageFilename}` }],
       readOnly: true
     }))
   const snapshotingValue = new Value(false)
