@@ -10,10 +10,10 @@ const dht = require('node-dht-sensor')
 function read (pin, humidityValue, temperatureValue) {
   dht.read(11, pin, function (error, temperature, humidity) {
     if (error) {
-      console.log('error', error)
+      console.log({error, device: 'dht11', pin})
       return
     }
-    console.log(`temp: ${temperature}°C, humidity: ${humidity}%`)
+    console.log({pin, msg: `temp: ${temperature}°C, humidity: ${humidity}%`})
     humidityValue.notifyOfExternalUpdate(humidity)
     temperatureValue.notifyOfExternalUpdate(temperature)
   })

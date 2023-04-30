@@ -20,17 +20,22 @@ function makeButtonThing (pin, asToggle, identifier, name) {
       description: 'Whether the button is pressed',
       readOnly: true
     }))
-  const button = new Gpio(pin, 'in', 'both')
+  const button = new Gpio(pin, 'in', 'both', {debounceTimeout: 10})
   let toggle = false
   let previousValue = false
   let newValue = false
+  let pinV = 0
   button.watch((error, v) => {
+    if (pinV == v) {
+      return
+    }
+    pinV = v
     if (error) {
-      console.log('error', error)
+      console.log({error})
       value.notifyOfExternalUpdate(false)
       return
     }
-    console.log(asToggle, toggle, v)
+    console.log({pin, asToggle, toggle, v})
     if (asToggle && v === 0) {
       toggle = !toggle
       newValue = toggle
